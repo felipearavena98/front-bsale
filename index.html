@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>B-Store</title>
+    <link rel="stylesheet" href="css/normalize.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+      integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="css/app.css" />
+  </head>
+  <body>
+    <header class="header">
+      <div class="header__contenedor">
+        <div class="header__barra">
+          <a href="/">
+            <img
+              class="header__logo"
+              src="img/logo_bsale.png"
+              alt="imagen logo"
+            />
+          </a>
+
+          <nav class="navegacion">
+            <a class="navegacion__enlace" href="index.html">Inicio</a>
+            <a class="navegacion__enlace" href="#">Carrito<i class="fas fa-shopping-cart"></i>
+            </a>
+          </nav>
+        </div>
+        <!--.header-barra-->
+
+
+        <div class="modelo">
+          <h1 class="modelo__nombre">Feliz Navidad</h1>
+          <p class="modelo__descripcion">
+            Mira nuestras ofertas!, tenemos hasta un 30% de descuento solo hasta
+            el 24 de diciembre.
+          </p>
+          <p class="modelo__precio">5% - 30%</p>
+          <a class="modelo__enlace" href="producto.html">Ir a las Ofertas</a>
+        </div>
+      </div>
+
+      <img
+        class="header__guitarra"
+        src="img/ofertas.png"
+        alt="imagen header guitarra"
+      />
+    </header>
+
+
+    <div class="search search__contenedor">
+            <div class="productos__search">
+                <div class="search">
+                    <div class="container-busqueda">
+                        <p>Buscar Producto</p>
+                    <input type="text" id="formularioBusqueda" onchange="filtroBusqueda()"/>
+                    </div>
+                    <span></span>
+                    <select name="" onchange="filtrarxCategoria()" class="categoriaProducto" id="categoriaProducto">
+                        <option>Seleccione Categoria</option>
+                    </select>
+                </div>
+        </div>
+    </div>
+
+    <main class="productos productos__contenedor">
+      <h2 class="productos__heading">Nuestros Productos</h2>
+      <div class="productos__grid" id="items"></div>
+      <!--./productos__grid-->
+    </main>
+
+    <template id="template-busqueda">
+        <input type="text" id="formulario"/>
+    </template>
+
+    <template id="template-category">
+        <option data-id=""></option>
+    </template>
+
+    <template id="template-product">
+      <div class="producto">
+        <img class="producto__imagen" src="" alt="" />
+
+        <div class="producto__contenido">
+          <h3 class="producto__nombre"></h3>
+          <p class="producto__descripcion"></p>
+          <p class="producto__precio"></p>
+          <button class="producto__agregar producto__enlace">Agregar al Carrito</button>
+        </div>
+      </div>
+      <!--./producto-->
+    </template>
+
+    <div id="paginacion"></div>
+
+    <section class="cursos">
+      <div class="cursos__contenedor cursos__grid">
+        <div class="cursos__contenido">
+          <h2 class="cursos__heading">Tienda Potenciada por BSALE</h2>
+          <p class="cursos__texto">
+            Esta tienda trabaja con el sistema de ventas de BSALE
+          </p>
+          <a class="cursos__enlace" href="https://www.bsale.cl/">Más información</a>
+        </div>
+      </div>
+    </section>
+
+
+    <footer class="footer">
+      <div class="footer__contenedor footer__contenido">
+        <nav class="footer__nav">
+          <a class="footer__enlace" href="index.html">Inicio</a>
+        </nav>
+
+        <p class="footer__copyright">Todos los derechos reservados</p>
+      </div>
+    </footer>
+    <script src="js/app.js"></script>
+  </body>
+</html>
