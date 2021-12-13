@@ -125,9 +125,9 @@ const pintarProductos = (data) => {
         }
 
         if(producto.url_image === null) {
-            templateProducto.querySelector('img').setAttribute('src', '../img/sinfoto.png')
+            templateProducto.querySelector('img').setAttribute('src', 'https://cdnx.jumpseller.com/todo-ssangyong/image/5630731/resize/635/635?1602074367')
         } else if (producto.url_image === ''){
-            templateProducto.querySelector('img').setAttribute('src', '../img/sinfoto.png')
+            templateProducto.querySelector('img').setAttribute('src', 'https://cdnx.jumpseller.com/todo-ssangyong/image/5630731/resize/635/635?1602074367')
         } else {
             templateProducto.querySelector('img').setAttribute('src', producto.url_image)
         }
