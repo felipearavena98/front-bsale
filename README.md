@@ -1,6 +1,6 @@
 # Besale Front - Prueba
 
-El siguiente documento tiene el proposito de explicar el codigo y como se interactua con la pagina
+El siguiente documento tiene el propósito de explicar el código y cómo se interactúa con la página.
 
 
 ## Autor
@@ -9,20 +9,44 @@ El siguiente documento tiene el proposito de explicar el codigo y como se intera
 
 
 
+## 🛠 Este desarrollo fue realizado con
+JavaScript
+-CCS
+-HTML 
+
+## Introducción 
+El propósito del desarrollo de esta página es construir una tienda online que pueda desplegar los productos, filtrarlos por categorías y que se puedan buscar productos.
+
+Desarrollar el ejercicio, implica el consumo de una construir un backend con una tecnología “x” y consumir API REST con los recursos entregados para el desarrollo.
+
 ## Proyecto Bsale
 
 ![App Screenshot](https://github.com/felipearavena98/imagenes/blob/main/img-proyecto-bsale/bstore.png?raw=true)
 
+
+## Usabilidad
+
+La página es simple, solo muestra la información de los productos y se presentan los filtros de búsqueda y categorías.
+
+El filtro de búsqueda funciona escribiendo en él y presionando enter, no se reinicia automáticamente al quedar vacío, se le debe dar un enter o simplemente apretar para recargar la página.
+
+El filtro de categorías funciona seleccionando una de las categorías disponibles y se cambia automáticamente, al volver a la posición inicial de las opciones la página vuelve a estar como estaba al principio.
 
 ## Demostración Pagina
 
 https://felipearavena98.github.io/front-bsale/
 
 
-# Documentación del codigo
+## Estructura de la página
+
+![App Screenshot](https://github.com/felipearavena98/imagenes/blob/main/img-proyecto-bsale/parte3HTML.png?raw=true)
+- css: La carpeta de css contiene los estilos que utiliza nuestro front, para cambiar la apariencia al html
+- img: Esta carpeta contiene las imágenes estáticas de la página.
+- js: En esta carpeta se encuentra el archivo de JavaScript que contiene las funcionalidades de la página.
+- index.html: El archivo de HTML es el que posee toda la estructura y contenido visible.
+
+# Documentación y Explicación del código
 ## Inicio -- index.html
-
-
 
 
 ![App Screenshot](https://github.com/felipearavena98/imagenes/blob/main/img-proyecto-bsale/parte1HTML.png?raw=true)
@@ -91,9 +115,10 @@ https://felipearavena98.github.io/front-bsale/
 # Documentación del codigo
 ## Inicio -- app.js
 
-Para comenzar con el archivo de javascript, tenemos en primera instancia los elementos que nos permitiran manejar estilos, etiquetas, framgent, etc. del DOM a traves de JavaScript.
+Para comenzar con el archivo de javascript, tenemos en primera instancia los elementos que nos permitirán manejar estilos, etiquetas, fragment, etc. del DOM a través de JavaScript.
 
-Utilizaremos un un input para realizar la busqueda de productos, tendremos un select para poder ver los productos filtrados por categorias y tambien manejaremos un contenedor en el cual se cargaran las imanges y seran estilizadas con css.
+Utilizaremos un un input para realizar la búsqueda de productos, tendremos un select para poder ver los productos filtrados por categorías y también manejaremos un contenedor en el cual se cargan las imágenes y serán estilizadas con css.
+
 ```javascript
 const busqueda = document.getElementById('formularioBusqueda')
 const templateBusqueda = document.getElementById('template-busqueda').content
@@ -104,7 +129,7 @@ const templateProducto = document.getElementById('template-product').content
 const fragment = document.createDocumentFragment();
 ```
 
-Continuando con una logica estructurada, despues de definir los elementos que nos permitiran modificar el DOM, pasamos a ejecutar el DOMContentLoaded, el cual nos permite inicializar la interfaz de HTML contenida en el DOM, de esta forma estamos indicando que estamos trabajando de manera estructurada mediante nodos.
+Continuando con una lógica estructurada, después de definir los elementos que nos permitirán modificar el DOM, pasamos a ejecutar el DOMContentLoaded, el cual nos permite inicializar la interfaz de HTML contenida en el DOM, de esta forma estamos indicando que estamos trabajando de manera estructurada mediante nodos.
 
 ```javascript
 
@@ -114,23 +139,22 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 ```
-
-Uno de nuestros endpoint estara dentro de una variable, solo par ahorrar algunas lineas de codigo y mantener el orden.
+Uno de nuestros endpoint estará dentro de una variable, solo para ahorrar algunas líneas de código y mantener el orden.
 
 Este endpoint nos permite obtener todos los productos provenientes de la base de datos, mediante una API REST.
+
 
 ```javascript
 const productURL = 'https://backsale.herokuapp.com/allproduct';
 ```
 
-
+El siguiente arreglo tiene el propósito de almacenar los productos provenientes de la API.
 ```javascript
 const arrProductos = []
 ```
-
+La función siguiente lo que hace es hacer el llamado a la api y obtener productos.
 ```javascript
 const obtenerProducto = async () => {
-
 
     try {
         const resp = await fetch(productURL);
@@ -150,7 +174,7 @@ const obtenerProducto = async () => {
 }
 
 ```
-
+La función siguiente lo que hace es hacer el llamado a la api y obtener las categorías.
 ```javascript
 const obtenerCategorias = async () => {
 
@@ -168,6 +192,9 @@ const obtenerCategorias = async () => {
     }
 }
 ```
+La función para filtrar por categorías, se ejecuta mediante un evento que sucede en el front con el select del front.
+
+Lo que hace es sacar el valor del id de la categoría, compararlo con lo que se selecciona en el select y pintar en la página por los productos que se están seleccionando.
 
 ```javascript
 const filtrarxCategoria = async () => {
@@ -188,7 +215,7 @@ const filtrarxCategoria = async () => {
 }
 
 ```
-
+El filtro de búsqueda funciona mediante un elemento del HTML, el cual interactúa con el arreglo de objeto que almacena los productos provenientes de la API y lo compara, al realizar lo anterior, se pintan en el HTML los productos que se están buscando en caso de tener similitud con la búsqueda.
 ```javascript
 const filtroBusqueda = () => {
 
@@ -206,6 +233,8 @@ const filtroBusqueda = () => {
 
 }
 ```
+
+Esta es la función principal, la cual pinta en el HTML todos los productos que se encontraron en la API, esto se realiza con los elementos provenientes del HTML, todo se realiza con nodos para modificar las etiquetas y fragment el cual almacena temporalmente la información lo cual permite que no se produzca un reflow.
 
 ```javascript
 const pintarProductos = (data) => {
@@ -237,12 +266,11 @@ const pintarProductos = (data) => {
     productos.appendChild(fragment);
 }
 ```
-
+Esta función permite llenar el select que contiene los nombres de las categorías y los id de esta misma.
 ```javascript
 const pintarCategorias = (data) => {
     data.forEach( category => {
         templateCategory.querySelector('option').textContent =  category.name
-        // templateCategory.querySelector('option').dataset.id =  category.id
         templateCategory.querySelector('option').value =  category.id
         const clone = templateCategory.cloneNode(true);
         fragment.appendChild(clone);
@@ -250,7 +278,7 @@ const pintarCategorias = (data) => {
     categoryProduct.appendChild(fragment)
 }
 ```
-
+La función de búsqueda cumple con tomar lo que se recibe en el input y mandarlo al filtro de búsqueda para comparar los valores.
 ```javascript
 const pintarBusqueda = (data) => {
     data.forEach( search => {
@@ -261,7 +289,7 @@ const pintarBusqueda = (data) => {
     busqueda.appendChild(fragment)
 }
 ```
-
+Para evitar que se siga ejecutando más de una vez la función de obtener productos, se realiza un reinicio del HTML para no tener duplicados.
 ```javascript
 function limpiarHTML() {
     while(productos.firstChild) {
