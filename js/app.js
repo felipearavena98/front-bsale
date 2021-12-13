@@ -28,7 +28,7 @@ productos.addEventListener('click', e => {
 
 // contenedor con la informacion de APIS
 
-const productURL = 'http://localhost:5000/allproduct';
+const productURL = 'https://backsale.herokuapp.com/allproduct';
 
 const arrProductos = []
 
@@ -58,7 +58,7 @@ const obtenerProducto = async () => {
 const obtenerCategorias = async () => {
 
     try {
-        const resp = await fetch(`http://localhost:5000/category`);
+        const resp = await fetch(`https://backsale.herokuapp.com/category`);
 
         if( !resp.ok ) throw 'No se puedo realizar la petición';
     
