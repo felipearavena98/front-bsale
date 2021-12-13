@@ -125,9 +125,9 @@ const pintarProductos = (data) => {
         }
 
         if(producto.url_image === null) {
-            templateProducto.querySelector('img').setAttribute('src', '../img/sinfoto.jpg')
+            templateProducto.querySelector('img').setAttribute('src', '../img/sinfoto.png')
         } else if (producto.url_image === ''){
-            templateProducto.querySelector('img').setAttribute('src', '../img/sinfoto.jpg')
+            templateProducto.querySelector('img').setAttribute('src', '../img/sinfoto.png')
         } else {
             templateProducto.querySelector('img').setAttribute('src', producto.url_image)
         }
