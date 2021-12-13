@@ -50,7 +50,7 @@ https://felipearavena98.github.io/front-bsale/
 
 
 ![App Screenshot](https://github.com/felipearavena98/imagenes/blob/main/img-proyecto-bsale/parte1HTML.png?raw=true)
-
+Al ingresar a la página, lo primero que veremos es el navbar y abajo estarán nuestras primeras funcionalidades, las cuales son el input de búsqueda y el selector de categorías.
 ```html
     <div class="search search__contenedor">
       <div class="productos__search">
@@ -84,7 +84,9 @@ https://felipearavena98.github.io/front-bsale/
       <option data-id=""></option>
     </template>
 ```
+Para poder utilizar sin problemas el fragment, podemos utilizar templates para asignar elementos y modificar sus etiquetas para poder pasarle funcionalidades.
 
+La parte más importante de la página es el contenedor de los productos, ya que es dinámico y su contenido puede variar, ya sea por los factores de la búsqueda de algún producto o el filtro de categorías.
 ![App Screenshot](https://github.com/felipearavena98/imagenes/blob/main/img-proyecto-bsale/parte2HTML.png?raw=true)
 
 ```html
@@ -110,7 +112,7 @@ https://felipearavena98.github.io/front-bsale/
       <!--./producto-->
     </template>
 ```
-
+Lo que se repite es crear primero las etiquetas importantes y/o contenedores y después sus respectivos templates, los cuales contienen los elementos que serán modificados y pasados a las clases de html.
 
 # Documentación del codigo
 ## Inicio -- app.js
