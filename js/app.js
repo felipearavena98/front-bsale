@@ -44,7 +44,6 @@ const obtenerProducto = async (numeroPagina) => {
 
         if( !resp.ok ) throw 'No se puedo realizar la petición';
         const data = await resp.json();
-        console.log(data)
         paginaFinal = data.numberOfPages;
         pintarProductos(data);
 
