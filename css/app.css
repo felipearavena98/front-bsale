@@ -423,3 +423,24 @@ img {
         grid-template-columns: repeat(3, 1fr);
     }
 }
+
+
+.tabs {
+    position: relative;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-top: 1px solid black;
+}
+
+#first:hover, 
+#previous:hover, 
+#next:hover, 
+#last:hover {
+    cursor: pointer;
+    background: black;
+    color: white;
+}
