@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
 const obtenerProducto = async (numeroPagina) => {
     
     try {
-        const resp = await fetch(`http://localhost:5000/allproduct?page=${numeroPagina}`);
+        const resp = await fetch(`https://backsale.herokuapp.com/allproduct?page=${numeroPagina}`);
 
         if( !resp.ok ) throw 'No se puedo realizar la petición';
         const data = await resp.json();
@@ -61,7 +61,7 @@ const filtroBusqueda = async () => {
     const texto = busqueda.value.toLowerCase();
     try {
         if(texto !== '') {
-            const resp = await fetch(`http://localhost:5000/producto/${texto}`)
+            const resp = await fetch(`https://backsale.herokuapp.com/producto/${texto}`)
             if( !resp.ok ) throw 'No se puedo realizar la petición';
             const data = await resp.json();
             console.log(data)
