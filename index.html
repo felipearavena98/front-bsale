@@ -61,33 +61,24 @@
 
 
     <div class="search search__contenedor">
-            <div class="productos__search">
-                <div class="search">
-                    <div class="container-busqueda">
-                        <p>Buscar Producto</p>
-                    <input type="text" id="formularioBusqueda" onchange="filtroBusqueda()"/>
-                    </div>
-                    <span></span>
-                    <select name="" onchange="filtrarxCategoria()" class="categoriaProducto" id="categoriaProducto">
-                        <option>Seleccione Categoria</option>
-                    </select>
-                </div>
+      <div class="productos__search">
+        <div class="search">
+          <div class="container-busqueda">
+            <p>Buscar Producto</p>
+            <input type="text" id="formularioBusqueda" />
+            <button id="botonBusqueda">Buscar</button>
+          </div>
         </div>
+      </div>
     </div>
+
+
 
     <main class="productos productos__contenedor">
       <h2 class="productos__heading">Nuestros Productos</h2>
       <div class="productos__grid" id="items"></div>
       <!--./productos__grid-->
     </main>
-
-    <template id="template-busqueda">
-        <input type="text" id="formulario"/>
-    </template>
-
-    <template id="template-category">
-        <option data-id=""></option>
-    </template>
 
     <template id="template-product">
       <div class="producto">
@@ -102,8 +93,19 @@
       </div>
       <!--./producto-->
     </template>
+    <div id="paginacion">
+      <div class="tabs">
+        <div id="first">First</div>
+        <div id="previous">previus</div>
+        <div id="next">next</div>
+        <div id="last">last</div>
+      </div>
+    </div>
 
-    <div id="paginacion"></div>
+    <!--Display the links to the pages-->
+    <template id="template-pagination">
+
+    </template>
 
     <section class="cursos">
       <div class="cursos__contenedor cursos__grid">
@@ -116,7 +118,6 @@
         </div>
       </div>
     </section>
-
 
     <footer class="footer">
       <div class="footer__contenedor footer__contenido">

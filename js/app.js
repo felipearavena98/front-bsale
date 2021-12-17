@@ -2,50 +2,50 @@
 // El orden de estas variables esta establecido por su posicion en el HTML
 //
 
-// const btnTermino = document.getElementById('btn-termino')
-// // const search = document.getElementById('termino')
-// const contenedorBusqueda = document.getElementById('contenedor-Busqueda').content
-const busqueda = document.getElementById('formularioBusqueda')
-const templateBusqueda = document.getElementById('template-busqueda').content
-const categoryProduct = document.getElementById('categoriaProducto')
-const templateCategory = document.getElementById('template-category').content
-const productos = document.getElementById('items')
-const templateProducto = document.getElementById('template-product').content
+const busqueda = document.getElementById('formularioBusqueda');
+const busquedaBoton = document.getElementById('botonBusqueda');
+const productos = document.getElementById('items');
+const paginacionDiv = document.getElementById('paginacion');
+const first = document.getElementById('first');
+const previous = document.getElementById('previous');
+const next = document.getElementById('next');
+const last = document.getElementById('last');
+const templateProducto = document.getElementById('template-product').content;
+
 const fragment = document.createDocumentFragment();
 
 // Header
 
+let paginaActual =  1;
+let paginaFinal;
+
+
 // EJECUTAR EL Contenido del DOM
 document.addEventListener("DOMContentLoaded", () => {
-    obtenerProducto();
-    obtenerCategorias();
+    obtenerProducto(1);
+    // busqueda.addEventListener('keyup', filtroBusqueda);
+    busquedaBoton.addEventListener('click', filtroBusqueda);
+    next.addEventListener('click', siguiente)
+    previous.addEventListener('click', atras)
+    last.addEventListener('click', pagFin)
+    first.addEventListener('click', pagInicio)
 });
-
-productos.addEventListener('click', e => {
-    addCarrito(e)
-})
 
 
 // contenedor con la informacion de APIS
-
-const productURL = 'https://backsale.herokuapp.com/allproduct';
-
-const arrProductos = []
-
-// Llamado de APIS
-const obtenerProducto = async () => {
+//https://backsale.herokuapp.com/
 
 
+
+const obtenerProducto = async (numeroPagina) => {
+    
     try {
-        const resp = await fetch(productURL);
+        const resp = await fetch(`http://localhost:5000/allproduct?page=${numeroPagina}`);
 
         if( !resp.ok ) throw 'No se puedo realizar la petición';
-    
         const data = await resp.json();
-        data.forEach( producto => {
-            arrProductos.push(producto)
-        })
-        
+        console.log(data)
+        paginaFinal = data.numberOfPages;
         pintarProductos(data);
 
     } catch (error) {
@@ -53,68 +53,63 @@ const obtenerProducto = async () => {
     }
 }
 
-// Llamar a las categorias
 
-const obtenerCategorias = async () => {
+// Filtro Busqueda
 
+
+const filtroBusqueda = async () => {
+    const texto = busqueda.value.toLowerCase();
     try {
-        const resp = await fetch(`https://backsale.herokuapp.com/category`);
-
-        if( !resp.ok ) throw 'No se puedo realizar la petición';
-    
-        const data = await resp.json();
-
-        pintarCategorias(data)
+        if(texto !== '') {
+            const resp = await fetch(`http://localhost:5000/producto/${texto}`)
+            if( !resp.ok ) throw 'No se puedo realizar la petición';
+            const data = await resp.json();
+            console.log(data)
+            pintarProductos(data);
+        } else {
+            obtenerProducto(1)
+        }
 
     } catch (error) {
         throw error;
     }
-}
-
-//  FILTRO POR CATEGORIA
-const filtrarxCategoria = async () => {
     
-    valorId = parseInt(document.getElementById("categoriaProducto").value)
+}
 
-    if(valorId > 0){
-        let resultadoBusqueda = arrProductos.filter(producto =>
-            producto.category == valorId
-        )
-        pintarProductos(resultadoBusqueda)
-    }else {
 
-        pintarProductos(arrProductos);
+const siguiente = async () => {
+    if(paginaActual < paginaFinal ) {
+        paginaActual += 1;
+        obtenerProducto(paginaActual)
+    } 
     
-    }
+}
 
+const atras = async () => {
+    if(paginaActual > 1){
+        paginaActual -= 1;
+        obtenerProducto(paginaActual)
+    }
+    
+}
+
+const pagInicio = async () => {
+    obtenerProducto(1)
+}
+
+const pagFin = async () => {
+    obtenerProducto(paginaFinal)
 }
 
 
-// Filtro Busqueda
 
-const filtroBusqueda = () => {
-
-    let variable = busqueda.value
-
-    if(variable !== '') {
-        let resultadoBusqueda = arrProductos.filter(producto =>
-            producto.name.toLowerCase().includes(variable.toLowerCase())
-        )
-
-        pintarProductos(resultadoBusqueda);
-    } else {
-        pintarProductos(arrProductos);
-    }
-
-}
- 
 // Const Mostrar Productos
 
 const pintarProductos = (data) => {
 
     limpiarHTML();
 
-    data.forEach(producto => {
+    data.data.forEach(producto => {
         
         templateProducto.querySelector('h3').textContent = producto.name
         templateProducto.querySelector('.producto__precio').textContent = '$' + producto.price
@@ -137,33 +132,8 @@ const pintarProductos = (data) => {
     });
 
     productos.appendChild(fragment);
-}
 
 
-
-// Cargar Select de CATEGORIAS
-
-const pintarCategorias = (data) => {
-    data.forEach( category => {
-        templateCategory.querySelector('option').textContent =  category.name
-        // templateCategory.querySelector('option').dataset.id =  category.id
-        templateCategory.querySelector('option').value =  category.id
-        const clone = templateCategory.cloneNode(true);
-        fragment.appendChild(clone);
-    })
-    categoryProduct.appendChild(fragment)
-}
-
-
-// // SEARCH
-
-const pintarBusqueda = (data) => {
-    data.forEach( search => {
-        templateBusqueda.querySelector('input').textContent =  search.name
-        const clone = templateBusqueda.cloneNode(true);
-        fragment.appendChild(clone);
-    })
-    busqueda.appendChild(fragment)
 }
 
 
@@ -172,4 +142,3 @@ function limpiarHTML() {
         productos.removeChild(productos.firstChild);
     }
 }
-
