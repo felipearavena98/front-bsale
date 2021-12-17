@@ -21,16 +21,15 @@ Desarrollar el ejercicio, implica el consumo de una construir un backend con una
 
 ## Proyecto Bsale
 
-![App Screenshot](https://github.com/felipearavena98/imagenes/blob/main/img-proyecto-bsale/bstore.png?raw=true)
+![App Screenshot](https://github.com/felipearavena98/imagenes/blob/main/img-proyecto-bsale/parte1BACK.png?raw=true)
 
 
 ## Usabilidad
 
-La página es simple, solo muestra la información de los productos y se presentan los filtros de búsqueda y categorías.
+La página es simple, solo muestra la información de los productos y se presentan los filtros de búsqueda.
 
-El filtro de búsqueda funciona escribiendo en él y presionando enter, no se reinicia automáticamente al quedar vacío, se le debe dar un enter o simplemente apretar para recargar la página.
+El filtro de búsqueda funciona escribiendo en él y presionando el boton de busqueda, para reestablecerlo, se debe quedar en blanco o vacio y presionar enter o el botón.
 
-El filtro de categorías funciona seleccionando una de las categorías disponibles y se cambia automáticamente, al volver a la posición inicial de las opciones la página vuelve a estar como estaba al principio.
 
 ## Demostración Pagina
 
@@ -49,40 +48,20 @@ https://felipearavena98.github.io/front-bsale/
 ## Inicio -- index.html
 
 
-![App Screenshot](https://github.com/felipearavena98/imagenes/blob/main/img-proyecto-bsale/parte1HTML.png?raw=true)
-Al ingresar a la página, lo primero que veremos es el navbar y abajo estarán nuestras primeras funcionalidades, las cuales son el input de búsqueda y el selector de categorías.
+![App Screenshot](https://github.com/felipearavena98/imagenes/blob/main/img-proyecto-bsale/parte1BACK2.0.png?raw=true)
+Al ingresar a la página, lo primero que veremos es el navbar y abajo estarán nuestras primeras funcionalidades, las cual es son el input de búsqueda.
 ```html
     <div class="search search__contenedor">
       <div class="productos__search">
         <div class="search">
           <div class="container-busqueda">
             <p>Buscar Producto</p>
-            <input
-              type="text"
-              id="formularioBusqueda"
-              onchange="filtroBusqueda()"
-            />
+            <input type="text" id="formularioBusqueda" />
+            <button id="botonBusqueda">Buscar</button>
           </div>
-          <span></span>
-          <select
-            name=""
-            onchange="filtrarxCategoria()"
-            class="categoriaProducto"
-            id="categoriaProducto"
-          >
-            <option>Seleccione Categoria</option>
-          </select>
         </div>
       </div>
     </div>
-
-    <template id="template-busqueda">
-      <input type="text" id="formulario" />
-    </template>
-
-    <template id="template-category">
-      <option data-id=""></option>
-    </template>
 ```
 Para poder utilizar sin problemas el fragment, podemos utilizar templates para asignar elementos y modificar sus etiquetas para poder pasarle funcionalidades.
 
@@ -122,52 +101,51 @@ Para comenzar con el archivo de javascript, tenemos en primera instancia los ele
 Utilizaremos un un input para realizar la búsqueda de productos, tendremos un select para poder ver los productos filtrados por categorías y también manejaremos un contenedor en el cual se cargan las imágenes y serán estilizadas con css.
 
 ```javascript
-const busqueda = document.getElementById('formularioBusqueda')
-const templateBusqueda = document.getElementById('template-busqueda').content
-const categoryProduct = document.getElementById('categoriaProducto')
-const templateCategory = document.getElementById('template-category').content
-const productos = document.getElementById('items')
-const templateProducto = document.getElementById('template-product').content
-const fragment = document.createDocumentFragment();
+const busqueda = document.getElementById('formularioBusqueda');
+const busquedaBoton = document.getElementById('botonBusqueda');
+const productos = document.getElementById('items');
+const paginacionDiv = document.getElementById('paginacion');
+const first = document.getElementById('first');
+const previous = document.getElementById('previous');
+const next = document.getElementById('next');
+const last = document.getElementById('last');
+const templateProducto = document.getElementById('template-product').content;
 ```
+Inicializamos las variables del menu de paginación.
+```javascript
+let paginaActual =  1;
+let paginaFinal;
+
+```
+
 
 Continuando con una lógica estructurada, después de definir los elementos que nos permitirán modificar el DOM, pasamos a ejecutar el DOMContentLoaded, el cual nos permite inicializar la interfaz de HTML contenida en el DOM, de esta forma estamos indicando que estamos trabajando de manera estructurada mediante nodos.
 
+Le pasamos por parametros que queremos que inicie en la página 1.
 ```javascript
 
 document.addEventListener("DOMContentLoaded", () => {
-    obtenerProducto();
-    obtenerCategorias();
+    obtenerProducto(1);
+    // busqueda.addEventListener('keyup', filtroBusqueda);
+    busquedaBoton.addEventListener('click', filtroBusqueda);
+    next.addEventListener('click', siguiente)
+    previous.addEventListener('click', atras)
+    last.addEventListener('click', pagFin)
+    first.addEventListener('click', pagInicio)
 });
 
 ```
-Uno de nuestros endpoint estará dentro de una variable, solo para ahorrar algunas líneas de código y mantener el orden.
 
-Este endpoint nos permite obtener todos los productos provenientes de la base de datos, mediante una API REST.
-
-
+La función siguiente lo que hace es hacer el llamado a la api y obtener productos, a esta le tenemos que pasar un parámetro, el cual contiene la página en la cual queremos estar para que nos muestre un producto, por defecto carga la primera página.
 ```javascript
-const productURL = 'https://backsale.herokuapp.com/allproduct';
-```
-
-El siguiente arreglo tiene el propósito de almacenar los productos provenientes de la API.
-```javascript
-const arrProductos = []
-```
-La función siguiente lo que hace es hacer el llamado a la api y obtener productos.
-```javascript
-const obtenerProducto = async () => {
-
+const obtenerProducto = async (numeroPagina) => {
+    
     try {
-        const resp = await fetch(productURL);
+        const resp = await fetch(`https://backsale.herokuapp.com/allproduct?page=${numeroPagina}`);
 
         if( !resp.ok ) throw 'No se puedo realizar la petición';
-    
         const data = await resp.json();
-        data.forEach( producto => {
-            arrProductos.push(producto)
-        })
-        
+        paginaFinal = data.numberOfPages;
         pintarProductos(data);
 
     } catch (error) {
@@ -176,63 +154,25 @@ const obtenerProducto = async () => {
 }
 
 ```
-La función siguiente lo que hace es hacer el llamado a la api y obtener las categorías.
+
+El filtro de búsqueda funciona mediante un elemento del HTML, funciona directamente con una búsqueda en la base de datos, solo necesitamos pasar el parámetro de búsqueda en el input y presionar el botón, y este lo comparara con algún resultado de la base de datos.
 ```javascript
-const obtenerCategorias = async () => {
-
+const filtroBusqueda = async () => {
+    const texto = busqueda.value.toLowerCase();
     try {
-        const resp = await fetch(`https://backsale.herokuapp.com/category`);
-
-        if( !resp.ok ) throw 'No se puedo realizar la petición';
-    
-        const data = await resp.json();
-
-        pintarCategorias(data)
+        if(texto !== '') {
+            const resp = await fetch(`https://backsale.herokuapp.com/producto/${texto}`)
+            if( !resp.ok ) throw 'No se puedo realizar la petición';
+            const data = await resp.json();
+            console.log(data)
+            pintarProductos(data);
+        } else {
+            obtenerProducto(1)
+        }
 
     } catch (error) {
         throw error;
-    }
-}
-```
-La función para filtrar por categorías, se ejecuta mediante un evento que sucede en el front con el select del front.
-
-Lo que hace es sacar el valor del id de la categoría, compararlo con lo que se selecciona en el select y pintar en la página por los productos que se están seleccionando.
-
-```javascript
-const filtrarxCategoria = async () => {
-    
-    valorId = parseInt(document.getElementById("categoriaProducto").value)
-
-    if(valorId > 0){
-        let resultadoBusqueda = arrProductos.filter(producto =>
-            producto.category == valorId
-        )
-        pintarProductos(resultadoBusqueda)
-    }else {
-
-        pintarProductos(arrProductos);
-    
-    }
-
-}
-
-```
-El filtro de búsqueda funciona mediante un elemento del HTML, el cual interactúa con el arreglo de objeto que almacena los productos provenientes de la API y lo compara, al realizar lo anterior, se pintan en el HTML los productos que se están buscando en caso de tener similitud con la búsqueda.
-```javascript
-const filtroBusqueda = () => {
-
-    let variable = busqueda.value
-
-    if(variable !== '') {
-        let resultadoBusqueda = arrProductos.filter(producto =>
-            producto.name.toLowerCase().includes(variable.toLowerCase())
-        )
-
-        pintarProductos(resultadoBusqueda);
-    } else {
-        pintarProductos(arrProductos);
-    }
-
+    }  
 }
 ```
 
@@ -268,29 +208,35 @@ const pintarProductos = (data) => {
     productos.appendChild(fragment);
 }
 ```
-Esta función permite llenar el select que contiene los nombres de las categorías y los id de esta misma.
+
+
+![App Screenshot](https://github.com/felipearavena98/imagenes/blob/main/img-proyecto-bsale/parte4HTML.png?raw=true)
+Funciones de paginación:
+Desde el backend obtenemos un arreglo que tiene lista la cantidad de páginas en total, la página principal y la última página, en el front solo debemos pasar esas características a unas funciones y podremos manejar una paginación.
 ```javascript
-const pintarCategorias = (data) => {
-    data.forEach( category => {
-        templateCategory.querySelector('option').textContent =  category.name
-        templateCategory.querySelector('option').value =  category.id
-        const clone = templateCategory.cloneNode(true);
-        fragment.appendChild(clone);
-    })
-    categoryProduct.appendChild(fragment)
+const siguiente = async () => {
+    if(paginaActual < paginaFinal ) {
+        paginaActual += 1;
+        obtenerProducto(paginaActual)
+    } 
+}
+
+const atras = async () => {
+    if(paginaActual > 1){
+        paginaActual -= 1;
+        obtenerProducto(paginaActual)
+    }
+}
+
+const pagInicio = async () => {
+    obtenerProducto(1)
+}
+
+const pagFin = async () => {
+    obtenerProducto(paginaFinal)
 }
 ```
-La función de búsqueda cumple con tomar lo que se recibe en el input y mandarlo al filtro de búsqueda para comparar los valores.
-```javascript
-const pintarBusqueda = (data) => {
-    data.forEach( search => {
-        templateBusqueda.querySelector('input').textContent =  search.name
-        const clone = templateBusqueda.cloneNode(true);
-        fragment.appendChild(clone);
-    })
-    busqueda.appendChild(fragment)
-}
-```
+
 Para evitar que se siga ejecutando más de una vez la función de obtener productos, se realiza un reinicio del HTML para no tener duplicados.
 ```javascript
 function limpiarHTML() {
